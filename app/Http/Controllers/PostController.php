@@ -12,11 +12,6 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::with(['user', 'category', 'tags'])->get();
-
-        if(session()->has('admin_id')){
-            return view('admin.dashboard', compact('posts'));
-        }
-
         return view('posts.index', compact('posts'));
     }
 

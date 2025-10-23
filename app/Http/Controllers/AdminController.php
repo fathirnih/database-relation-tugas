@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\Post;
 
 class AdminController extends Controller
 {
@@ -36,8 +37,10 @@ class AdminController extends Controller
     // Dashboard admin
     public function dashboard()
     {
-        return view('admin.dashboard');
-    }
+        $posts = Post::all(); // jangan lupa ambil posts
+        return view('admin.dashboard',compact('posts'));
+     }
+    
 
     // Logout
     public function logout(Request $request)

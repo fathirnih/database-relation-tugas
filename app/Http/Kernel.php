@@ -22,7 +22,7 @@ class Kernel extends HttpKernel
     ];
 
     /**
-     * Middleware groups.
+     * The application's route middleware groups.
      */
     protected $middlewareGroups = [
         'web' => [
@@ -48,16 +48,15 @@ class Kernel extends HttpKernel
      */
     protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\Authenticate::class,
+        'kenapa' => \App\Http\Middleware\AdminAuth::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
+        'password.confirm' => \App\Http\Middleware\RequirePassword::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-
-        // Middleware khusus admin
-        'admin.auth' => \App\Http\Middleware\AdminAuth::class,
+        
     ];
 }
