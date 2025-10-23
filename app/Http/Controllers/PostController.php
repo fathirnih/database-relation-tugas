@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\User;
 
 class PostController extends Controller
 {
@@ -17,5 +18,11 @@ class PostController extends Controller
     {
         $post = Post::with(['user', 'category', 'tags'])->findOrFail($id);
         return view('posts.show', compact('post'));
+    }
+    // Jumlah post per user
+    public function postsPerUser()
+    {
+        $postsPerUser = User::withCount('posts')->get();
+        return view('posts.per_user', compact('postsPerUser'));
     }
 }
