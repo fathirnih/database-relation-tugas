@@ -1,13 +1,8 @@
-{{-- resources/views/posts/show.blade.php --}}
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $post->title }}</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-</head>
-<body class="bg-light">
+@extends('layouts.app')
+
+@section('title', $post->title)
+
+@section('content')
 
 <div class="container py-5">
     <a href="{{ route('posts.index') }}" class="btn btn-outline-secondary mb-4">← Kembali</a>
@@ -33,6 +28,5 @@
         </div>
     </div>
 </div>
+@endsection
 
-</body>
-</html>
