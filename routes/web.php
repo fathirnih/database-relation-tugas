@@ -4,6 +4,13 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\PostController;
 
+Route::middleware('admin.auth')->prefix('admin')->group(function () {
+    Route::resource('posts', PostController::class, [
+        'as' => 'admin' // supaya nama route jadi admin.posts.index, admin.posts.create, dst
+    ]);
+});
+
+
 Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
 
