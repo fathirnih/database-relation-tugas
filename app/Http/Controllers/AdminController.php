@@ -24,7 +24,7 @@ class AdminController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        if ($user && Hash::check($request->password, $user->password) && $user->role == 'admin') {
+        if ($user && Hash::check($request->password, $user->password)) {
             // simpan session
             session(['admin_id' => $user->id, 'admin_name' => $user->name]);
             return redirect()->route('admin.dashboard');
