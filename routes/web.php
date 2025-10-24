@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\AdminAuth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PostController;
@@ -17,7 +18,7 @@ Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
     Route::post('/logout', [AdminController::class, 'logout'])->name('admin.logout');
 
 
-Route::prefix('admin')->middleware('admin')->group(function () {
+Route::prefix('admin')->middleware(AdminAuth::class)->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::resource('posts', PostController::class, ['as' => 'admin']);
 });
