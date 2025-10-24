@@ -11,7 +11,7 @@
     
 
     {{-- Argon Design System CSS (opsional biar tampilannya keren) --}}
-    <link href="https://demos.creative-tim.com/argon-design-system/assets/css/argon-design-system.min.css?v=1.2.2" rel="stylesheet">
+      <link href="https://cdn.jsdelivr.net/npm/@creative-tim-official/argon-dashboard@2.0.5/assets/css/argon-dashboard.min.css" rel="stylesheet">
 
     <style>
         body {
