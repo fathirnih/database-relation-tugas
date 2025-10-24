@@ -37,7 +37,7 @@ class AdminController extends Controller
     // Dashboard admin
     public function dashboard()
     {
-        $posts = Post::all(); // jangan lupa ambil posts
+        $posts = Post::with(['category', 'tags'])->get();
         return view('admin.dashboard',compact('posts'));
      }
     
@@ -46,6 +46,6 @@ class AdminController extends Controller
     public function logout(Request $request)
     {
         $request->session()->forget(['admin_id', 'admin_name']);
-        return redirect()->route('admin.login')->with('success', 'Anda berhasil logout.');
+        return redirect()->route('home')->with('success', 'Anda berhasil logout.');
     }
 }

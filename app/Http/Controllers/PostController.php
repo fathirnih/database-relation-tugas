@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use App\Models\User;
+use App\Models\Category;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -25,70 +26,97 @@ class PostController extends Controller
     // Form buat post baru
     public function create()
     {
-        return view('admin.posts.create');
+        $categories = Category::all();
+        $tags = Tag::all();
+        return view('admin.create', compact('categories', 'tags'));
     }
 
     // Simpan post baru
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,gif,svg|max:2048'
+            'title'       => 'required|string|max:255',
+            'content'     => 'required',
+            'category_id' => 'nullable|exists:categories,id',
+            'tags'        => 'array',
+            'tags.*'      => 'exists:tags,id',
+            'image'       => 'nullable|image|mimes:jpg,jpeg,png,gif,svg|max:2048',
         ]);
 
+        // Simpan data post
         $post = new Post();
         $post->title = $request->title;
         $post->content = $request->content;
+        $post->category_id = $request->category_id ?? null;
         $post->user_id = session('admin_id');
 
-        if($request->hasFile('image')){
+        // Upload gambar
+        if ($request->hasFile('image')) {
             $file = $request->file('image');
-            $filename = time().'_'.$file->getClientOriginalName();
+            $filename = time() . '_' . $file->getClientOriginalName();
             $file->move(public_path('uploads/posts'), $filename);
             $post->image = $filename;
         }
 
         $post->save();
 
-        return redirect()->route('admin.posts.index')->with('success', 'Post berhasil dibuat.');
+        // Simpan relasi tags ke pivot table
+        if ($request->filled('tags')) {
+            $post->tags()->sync($request->tags);
+        }
+
+        return redirect()->route('admin.dashboard')->with('success', 'Post berhasil dibuat.');
     }
 
     // Form edit post
     public function edit($id)
     {
-        $post = Post::findOrFail($id);
-        return view('admin.posts.edit', compact('post'));
+        $post = Post::with('tags')->findOrFail($id);
+        $categories = Category::all();
+        $tags = Tag::all();
+        return view('admin.edit', compact('post', 'categories', 'tags'));
     }
 
     // Update post
     public function update(Request $request, $id)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,gif,svg|max:2048'
+            'title'       => 'required|string|max:255',
+            'content'     => 'required',
+            'category_id' => 'nullable|exists:categories,id',
+            'tags'        => 'array',
+            'tags.*'      => 'exists:tags,id',
+            'image'       => 'nullable|image|mimes:jpg,jpeg,png,gif,svg|max:2048',
         ]);
 
         $post = Post::findOrFail($id);
         $post->title = $request->title;
         $post->content = $request->content;
+        $post->category_id = $request->category_id ?? null;
 
-        if($request->hasFile('image')){
+        // Update gambar
+        if ($request->hasFile('image')) {
             // Hapus gambar lama jika ada
-            if($post->image && file_exists(public_path('uploads/posts/' . $post->image))){
+            if ($post->image && file_exists(public_path('uploads/posts/' . $post->image))) {
                 unlink(public_path('uploads/posts/' . $post->image));
             }
 
             $file = $request->file('image');
-            $filename = time().'_'.$file->getClientOriginalName();
+            $filename = time() . '_' . $file->getClientOriginalName();
             $file->move(public_path('uploads/posts'), $filename);
             $post->image = $filename;
         }
 
         $post->save();
 
-        return redirect()->route('admin.posts.index')->with('success', 'Post berhasil diupdate.');
+        // Update relasi tag (sync pivot)
+        if ($request->filled('tags')) {
+            $post->tags()->sync($request->tags);
+        } else {
+            $post->tags()->detach();
+        }
+
+        return redirect()->route('admin.dashboard')->with('success', 'Post berhasil diupdate.');
     }
 
     // Hapus post
@@ -97,12 +125,15 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
 
         // Hapus file gambar jika ada
-        if($post->image && file_exists(public_path('uploads/posts/' . $post->image))){
+        if ($post->image && file_exists(public_path('uploads/posts/' . $post->image))) {
             unlink(public_path('uploads/posts/' . $post->image));
         }
 
+        // Hapus relasi tags di pivot
+        $post->tags()->detach();
+
         $post->delete();
 
-        return redirect()->route('admin.posts.index')->with('success', 'Post berhasil dihapus.');
+        return redirect()->route('admin.dashboard')->with('success', 'Post berhasil dihapus.');
     }
 }
