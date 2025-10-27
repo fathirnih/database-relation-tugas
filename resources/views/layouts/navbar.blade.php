@@ -19,6 +19,10 @@
         <li class="nav-item">
           <a class="nav-link {{ request()->is('contact*') ? 'active' : '' }}" href="{{ url('/contact') }}">Contact</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link {{ request()->is('/login') ? 'active' : '' }}" href="{{ url('/login') }}">Login</a>
+        </li>
+  
       </ul>
     </div>
   </div>

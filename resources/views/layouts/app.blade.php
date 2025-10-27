@@ -9,9 +9,14 @@
     {{-- Bootstrap 5 CDN --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     
+   <!-- Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+<link href="{{ asset('assets/vendor/nucleo/css/nucleo.min.css') }}" rel="stylesheet">
+<link href="{{ asset('assets/vendor/@fortawesome/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
 
-    {{-- Argon Design System CSS (opsional biar tampilannya keren) --}}
-      <link href="https://cdn.jsdelivr.net/npm/@creative-tim-official/argon-dashboard@2.0.5/assets/css/argon-dashboard.min.css" rel="stylesheet">
+<!-- Argon CSS -->
+<link href="{{ asset('assets/css/argon.min.css') }}" rel="stylesheet">
+
 
     <style>
         body {
@@ -37,7 +42,14 @@
     {{-- Footer --}}
     @include('layouts.footer')
 
-    {{-- Script Bootstrap --}}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core JS -->
+<script src="{{ asset('assets/vendor/jquery/dist/jquery.min.js') }}"></script>
+<script src="{{ asset('assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+
+<!-- Argon JS -->
+<script src="{{ asset('assets/js/argon.min.js') }}"></script>
+
+
+  
 </body>
 </html>
