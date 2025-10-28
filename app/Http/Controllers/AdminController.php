@@ -37,8 +37,9 @@ class AdminController extends Controller
     // Dashboard admin
     public function dashboard()
     {
-        $posts = Post::with(['category', 'tags'])->get();
-        return view('admin.dashboard',compact('posts'));
+        $posts = Post::with(['category', 'tags'])->paginate(5);
+        $totalPosts = Post::count();
+        return view('admin.dashboard',compact('posts','totalPosts'));
      }
     
 

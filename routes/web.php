@@ -22,3 +22,5 @@ Route::prefix('admin')->middleware(AdminAuth::class)->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::resource('posts', PostController::class, ['as' => 'admin']);
 });
+
+

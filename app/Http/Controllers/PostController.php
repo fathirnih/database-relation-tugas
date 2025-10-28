@@ -12,7 +12,7 @@ class PostController extends Controller
     // Tampilkan semua post (untuk admin & user)
     public function index()
     {
-        $posts = Post::with(['user', 'category', 'tags'])->get();
+        $posts = Post::with(['user', 'category', 'tags'])->paginate(5);
         return view('posts.index', compact('posts'));
     }
 
